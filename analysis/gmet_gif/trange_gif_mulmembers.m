@@ -3,19 +3,20 @@ close all
 clc;clear
 addpath('~/m_map');
 
+day=1;
 dall=zeros(800,1300,11);
 
 file1='/Users/localuser/GMET/test0622/reg_197901.nc';
 d1=ncread(file1,'trange');
 d1=flipud(permute(d1,[2,1,3]));
 
-dall(:,:,1)=d1(:,:,1);
+dall(:,:,1)=d1(:,:,day);
 for i=1:10
     file2=['/Users/localuser/GMET/test0622/ens_197901.',num2str(i,'%.3d'),'.nc'];
     di=ncread(file2,'t_range');
     di(di<-100)=nan;
     di=flipud(permute(di,[2,1,3]));
-    dall(:,:,i+1)=di(:,:,1);
+    dall(:,:,i+1)=di(:,:,day);
 end
 
 fsize=7;

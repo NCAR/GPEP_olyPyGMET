@@ -13,7 +13,7 @@ p1=flipud(permute(p1,[2,1,3]));
 
 pall(:,:,1)=p1(:,:,day);
 for i=1:10
-    file2=['/Users/localuser/GMET/test0622/run1/ens_197901.',num2str(i,'%.3d'),'.nc'];
+    file2=['/Users/localuser/GMET/test0622/ens_197901.',num2str(i,'%.3d'),'.nc'];
     prcp=ncread(file2,'pcp');
     prcp(prcp<0)=nan;
     prcp=flipud(permute(prcp,[2,1,3]));
@@ -27,10 +27,10 @@ for i=1:12
     axes(haa(i));
     if i<=11
         imagesc(pall(:,:,i),'alphadata',~isnan(pall(:,:,i)));
-        xlim([700,1300]);
-        ylim([200,600]);
+%         xlim([700,1300]);
+%         ylim([200,600]);
         colormap(jet)
-        caxis([0,50])
+        caxis([0,20])
         if i==1
             title('OI merge')
         else
