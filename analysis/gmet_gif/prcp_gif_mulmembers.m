@@ -3,7 +3,7 @@ close all
 clc;clear
 addpath('~/m_map');
 
-day=20;
+day=1;
 pall=zeros(800,1300,11);
 
 file1='/Users/localuser/GMET/test0622/reg_197901.nc';
@@ -27,10 +27,10 @@ for i=1:12
     axes(haa(i));
     if i<=11
         imagesc(pall(:,:,i),'alphadata',~isnan(pall(:,:,i)));
-%         xlim([700,1300]);
-%         ylim([200,600]);
+        xlim([700,1300]);
+        ylim([200,600]);
         colormap(jet)
-        caxis([0,20])
+        caxis([0,80])
         if i==1
             title('OI merge')
         else

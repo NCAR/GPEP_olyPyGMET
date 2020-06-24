@@ -14,7 +14,7 @@ day=1;
 subplot(1,3,1)
 imagesc(pcp(:,:,day),'alphadata',~isnan(pcp(:,:,day)));
 colorbar()
-caxis([-4,4])
+caxis([-4,8])
 colormap(jet)
 title('pcp')
 % xlim([700,1300]);
@@ -33,7 +33,7 @@ title('pop')
 subplot(1,3,3)
 imagesc(pcp_err(:,:,day),'alphadata',~isnan(pcp_err(:,:,day)));
 colorbar()
-caxis([0,10])
+caxis([0,5])
 colormap(jet)
 title('pcp error')
 % xlim([700,1300]);
