@@ -1,24 +1,24 @@
 % calculate the metrics of ensemble estimates
 clc;clear;close all
 % Plato
-Inpath='/home/gut428/GMET/EMDNA/Evaluation';
-Outpath='/home/gut428/GMET/EMDNA/Evaluation';
+% Inpath='/home/gut428/GMET/EMDNA/Evaluation';
+Outpath='.';
 % mac
-% Inpath='/Users/localuser/GMET/results';
+Inpath='/Users/localuser/GMET/EMDNA_evaluate/ens';
 
 year=2016:2016;
 vars={'prcp','tmean','trange'};
 leastnum=[200,200,200]; % the least number of gauge samples so that the gauge will be included in evaluation
 varnum=length(vars);
-EnsNum=[1,20];
+EnsNum=[1,100];
 ensnum=EnsNum(2)-EnsNum(1)+1;
-sufffix='_old';
+suffix='_scale1';
 
-for vv=1:varnum
+for vv=2:varnum
     varvv=vars{vv};
-    filestn=[Inpath,'/stn_',varvv,sufffix,'.mat'];
-    fileens=[Inpath,'/ens_',varvv,sufffix,'.mat'];
-    outfile=[Outpath,'/metric_',varvv,sufffix,'.mat'];
+    filestn=[Inpath,'/stn_',varvv,suffix,'.mat'];
+    fileens=[Inpath,'/ens_',varvv,suffix,'.mat'];
+    outfile=[Outpath,'/metric_',varvv,suffix,'.mat'];
     if exist(outfile,'file')
         continue;
     end

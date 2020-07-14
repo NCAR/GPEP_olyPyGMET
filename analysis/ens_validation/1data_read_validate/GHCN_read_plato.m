@@ -11,7 +11,7 @@ Outfile_station=[Outpath,'/GaugeValid.mat'];  % File to store all information of
 % Basic settings
 Overwrite=1; % 1: overwrite files in Outpath. Otherwise: skip existing files in Outpath.
 BasicInfo.period_range=[1979,2018]; % [start year, end year]
-BasicInfo.period_len=[5,7]; % the lower/upper number of years that are within period_range
+BasicInfo.period_len=[1,7]; % the lower/upper number of years that are within period_range
 BasicInfo.VarOut={'Date(yyyymmdd)','Precipitation(mm)','Tmin(C)','Tmax(C)'};
 BasicInfo.VarRead={'PRCP','TMIN','TMAX'}; % variables to be read
 BasicInfo.scalefactor=[0.1, 0.1, 0.1]; % scale factor of original variables

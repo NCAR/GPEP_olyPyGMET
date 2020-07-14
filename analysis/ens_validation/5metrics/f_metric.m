@@ -14,9 +14,9 @@ for i=1:stnnum
     if length(Si)<leastnumvv 
         Si=nan; Ei=nan;
     end
-    temp1=Index_cal1(Ei,Si);
-    temp2=Index_cal2(Ei,Si,PTH);
-    KGEgroup=f_KEG(Ei,Si);
+    temp1=Index_cal1(Si,Ei);
+    temp2=Index_cal2(Si,Ei,PTH);
+    KGEgroup=f_KEG(Si,Ei);
     meti=[temp1,temp2,KGEgroup];
     met(i,:)=meti;
 end
@@ -41,9 +41,9 @@ for ss=1:4
         if length(Si)<leastnumvv/4
             Si=nan; Ei=nan;
         end
-        temp1=Index_cal1(Ei,Si);
-        temp2=Index_cal2(Ei,Si,PTH);
-        KGEgroup=f_KEG(Ei,Si);
+        temp1=Index_cal1(Si,Ei);
+        temp2=Index_cal2(Si,Ei,PTH);
+        KGEgroup=f_KEG(Si,Ei);
         meti=[temp1,temp2,KGEgroup];
         met4{ss}(i,:)=meti;
     end

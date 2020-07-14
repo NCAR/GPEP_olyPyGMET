@@ -2,14 +2,14 @@ clc;clear;close all
 Outfigure='Discrimination_Reliability';
 % plot reliablity diagrams
 % mac path
-Infile_gauge='/Users/localuser/GMET/results/stn_prcp.mat';
-Infile_ensemble='/Users/localuser/GMET/results/ens_prcp.mat';
+Infile_gauge='/Users/localuser/GMET/EMDNA_evaluate/ens/stn_prcp.mat';
+Infile_ensemble='/Users/localuser/GMET/EMDNA_evaluate/ens/ens_prcp.mat';
 
 % Plato path
-% Infile_gauge='/home/gut428/GMET/AnalysisCode/extract_data/stn_prcp.mat';
-% Infile_ensemble='/home/gut428/GMET/AnalysisCode/extract_data/ens_prcp.mat';
+% Infile_gauge='/home/gut428/GMET/EMDNA_ens_evaluation/stn_prcp_andrew.mat';
+% Infile_ensemble='/home/gut428/GMET/EMDNA_ens_evaluation/ens_prcp_andrew.mat';
 File_prob='Probability_data.mat';
-YEAR=2016:2018;
+YEAR=2016:2016;
 leastnum=300; % the least number of gauge samples so that the gauge will be included in evaluation
 RNR_threshold=[0,1,10,25,50]; % rain or no rain
 Info.latrange=[5,85]; % this must be consistent with ensemble estimates

@@ -4,8 +4,8 @@ Inpath='/home/gut428/GMET/StnValidation';
 Infile_station=[Inpath,'/GaugeValid.mat']; 
 Outfile='/home/gut428/GMET/StnValidation.nc4';
 period=[1979,2018];
-validratio=0.7;
-leastnum=1000;
+validratio=0;
+leastnum=500;
 
 % load the basic information
 load(Infile_station,'GaugeValid');
@@ -27,7 +27,9 @@ trange=nan*zeros(daynum,gnum);
 % read gauge data
 indout=zeros(gnum,1);
 for gg=1:gnum
-    fprintf('%d--%d\n',gg,gnum);
+    if mod(gg,100)==0
+        fprintf('%d--%d\n',gg,gnum);
+    end
     infile=[Inpath,'/',ID{gg},'.mat'];
     load(infile,'data');
     dategg=data(:,1);
