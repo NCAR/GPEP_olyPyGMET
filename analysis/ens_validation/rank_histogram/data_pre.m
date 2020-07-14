@@ -10,7 +10,7 @@ EnsNum=[1,100];
 ensnum=EnsNum(2)-EnsNum(1)+1;
 
 for y=1:length(year)
-    suffix=['_',str(year(y))];
+    suffix=['_',str(year(];
     ff=1;
     for vv=1:varnum
         varvv=vars{vv};
