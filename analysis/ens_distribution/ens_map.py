@@ -35,7 +35,7 @@ for e in range(en):
         ens_data[:, :, i, e] = np.nanmean(di, axis=0)
 
 io.savemat(outfile,{'ens_data':ens_data, 'oi_data':oi_data, 'year':year, 'month':month, 'ens_num':ens_num},
-           do_compression='True')
+           do_compression=True)
 
 
 # load Andrew data
@@ -56,4 +56,4 @@ for e in range(en):
         di = d[vars[i]][:].data[dse[0]:dse[1],:,:]
         ens_data[:, :, i, e] = np.nanmean(di, axis=0)
 io.savemat(outfile,{'ens_data':ens_data, 'year':year, 'month':month, 'ens_num':ens_num},
-           do_compression='True')
+           do_compression=True)
