@@ -75,8 +75,8 @@ for i=1:4
     end
 end
 
-fig = gcf;
-fig.PaperPositionMode='auto';
-fig_pos = fig.PaperPosition;
-fig.PaperSize = [fig_pos(3) fig_pos(4)];
-print(gcf,'-djpeg',[Outfigure,'.jpg'],'-r600');
+% fig = gcf;
+% fig.PaperPositionMode='auto';
+% fig_pos = fig.PaperPosition;
+% fig.PaperSize = [fig_pos(3) fig_pos(4)];
+% print(gcf,'-djpeg',[Outfigure,'.jpg'],'-r600');
