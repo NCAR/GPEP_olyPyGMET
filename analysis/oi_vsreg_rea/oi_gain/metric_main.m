@@ -10,6 +10,12 @@ else
     lle=stninfo(:,2:4);
     nstn=size(lle,1);
     
+    file_obsflag='/Users/localuser/Research/EMDNA/stndata_aftercheck_obsflag.mat';
+    load(file_obsflag,'prcp_flag','temp_flag');
+    prcp_stn(prcp_flag~=1)=nan;
+    tmean_stn(temp_flag~=1)=nan;
+    trange_stn(temp_flag~=1)=nan;
+    
     file_oi='/Users/localuser/Research/EMDNA/OImerge_stn_GWRLSBMA_prcp.mat';
     load(file_oi,'oimerge_stn');
     met_prcp_oi=nan*zeros(nstn,16);
@@ -52,6 +58,12 @@ else
     load(filestn,'prcp_stn','tmean_stn','trange_stn','stninfo');
     lle=stninfo(:,2:4);
     nstn=size(lle,1);
+    
+    file_obsflag='/Users/localuser/Research/EMDNA/stndata_aftercheck_obsflag.mat';
+    load(file_obsflag,'prcp_flag','temp_flag');
+    prcp_stn(prcp_flag~=1)=nan;
+    tmean_stn(temp_flag~=1)=nan;
+    trange_stn(temp_flag~=1)=nan;
     
     file_reg='/Users/localuser/Research/EMDNA/regression_stn.mat';
     load(file_reg,'prcp','tmean','trange');

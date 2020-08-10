@@ -1,18 +1,101 @@
 clc;clear;close all
-% load('oi_ens_mean_201808.mat');
-load('/Users/localuser/Downloads/oi_ens_mean_201608.mat')
-ens_data(ens_data<-100)=nan;
-v=1;
-dp=nan*zeros(800,1300,6);
-dp(:,:,1)=oi_data(:,:,v);
-dp(:,:,2:end)=squeeze(ens_data(:,:,v,:));
-dp=flipud(dp);
+addpath('~/m_map/');
+Outfigure='ens_map';
+shapefile='/Users/localuser/Google Drive/Datasets/Shapefiles/North America/From MERIT DEM/North_America.shp';
+shp=shaperead(shapefile);
 
-for i=1:6
-    subplot(2,3,i)
-    imagesc(dp(:,:,i),'alphadata',~isnan(dp(:,:,i)))
-    colormap('jet');
-    caxis([0,10]);
-    xlim([500,1100]);
-    ylim([400,600]);
+% data preparation
+% v: 1 pcp; 2 tmean; 3 trange
+datafile='ens_map_201606.mat';
+if exist(datafile,'file')
+    load(datafile)
+else
+    path='/Users/localuser/Research/EMDNA/ens_map';
+    data=cell(4,3);
+    year=2016;
+    month=6;
+    
+    file=[path,'/oi_ens_mean_',num2str(year*100+month),'.mat'];
+    load(file)
+    ens_data(ens_data<-100)=nan;
+    for v=1:3
+        data{1,v}=flipud(oi_data(:,:,v));
+        data{2,v}=flipud(squeeze(ens_data(:,:,v,1))); % ens_1
+        data{3,v}=flipud(squeeze(ens_data(:,:,v,5))); % ens_100
+        data{4,v}=flipud(squeeze(ens_std(:,:,v))); % std
+        data{4,v}(isnan(data{1,v}))=nan;
+    end
+    
+    load('../../DEM/NA_DEM_010deg_trim.mat','InfoLow');
+    lat=(InfoLow.yrange(2)-InfoLow.Ysize/2):-InfoLow.Ysize:(InfoLow.yrange(1)+InfoLow.Ysize/2);
+    lon=(InfoLow.xrange(1)+InfoLow.Xsize/2):InfoLow.Xsize:(InfoLow.xrange(2)-InfoLow.Xsize/2);
+    
+    save(datafile,'data','lat','lon');
 end
+
+% plot
+% basic settings
+title1={'Precipitation','Mean temperature','Temperature range'};
+title2={'OI input','Member 1', 'Member 100','Standard deviation'};
+unit={'mm/d','\circC','\circC'};
+
+
+clims=cell(4,3);
+clims(1:3,1)={[0, 8]};
+clims(1:3,2)={[0, 30]};
+clims(1:3,3)={[0, 30]};
+clims(4,1)={[0, 2]};
+clims(4,2)={[0, 0.6]};
+clims(4,3)={[0, 0.6]};
+
+fsize=5;
+figure('color','w','unit','centimeters','position',[15,20,14.5,18]);
+haa=tight_subplot(4,3, [.02 .02],[.01 .03],[.04 .02]);
+flag=1;
+for i=1:4
+    for v=1:3
+        % DEM
+        axes(haa(flag));
+        m_proj('Miller','lon',[-180 -50],'lat',[5 85]);
+        hold on
+        for j=1:length(shp)
+            ll1=shp(j).X; ll2=shp(j).Y; % delete Hawaii
+            ind=(ll1<-150)&(ll2<30);
+            ll1(ind)=nan; ll2(ind)=nan;
+            m_line(ll1,ll2,'color',[0.6,0.6,0.6]);
+        end
+        m_pcolor(lon,lat,data{i,v});
+        hold off
+        shading flat
+        
+        m_grid('linewi',1,'tickdir','in','fontsize',fsize,'xticklabel','','yticklabel','','color','w');
+        if i==1
+            title(title1{v},'fontsize',fsize+2);
+        end
+        if v==1
+            ylabel(title2{i},'fontweight','bold','fontsize',fsize+2);
+        end
+        
+        if i<=3
+            colormap(gca,(m_colmap('jet',60)));
+%             colormap(gca,'hsv');
+        else
+            colormap(gca,flipud(m_colmap('blue',60)));
+        end
+        %         colormap(gca,(m_colmap('jet',60)));
+        caxis(clims{i,v});
+        h=colorbar('west','fontsize',fsize);
+        set(get(h,'title'),'String',unit{v},'fontsize',fsize);
+        h.Position=h.Position+[0.05 0.01 -0.015 -0.14];
+        h.AxisLocation='out';
+        set(h,'ticks',linspace(clims{i,v}(1),clims{i,v}(2),3));
+%         cbarrow
+        flag=flag+1;
+    end
+end
+
+fig = gcf;
+fig.PaperPositionMode='auto';
+fig_pos = fig.PaperPosition;
+fig.PaperSize = [fig_pos(3) fig_pos(4)];
+print(gcf,'-dpng',[Outfigure,'.png'],'-r600');

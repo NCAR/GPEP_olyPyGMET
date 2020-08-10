@@ -83,111 +83,120 @@ else
     % station, only consider the 20th closest station
     metbin=cell(3,1);
     metbin(:)={nan*zeros(numbin,16)};
+    metbin_oi=metbin;
+    metbin_rea=metbin;
     metnum=cell(3,1);
     metnum(:)={nan*zeros(numbin,16)};
     metdist=nan*zeros(numbin,1);
     
+    load('../oi_gain/mean_value.mat','mean_stn');
     load('../oi_gain/oi_evaluation.mat','met_prcp_oi','met_tmean_oi','met_trange_oi')
     metall=cell(3,2);
+    met_prcp_oi(:,2)=met_prcp_oi(:,2)./mean_stn(:,1);
+    met_trange_oi(:,2)=met_trange_oi(:,2)./mean_stn(:,3);
     metall{1,1}=met_prcp_oi; metall{2,1}=met_tmean_oi; metall{3,1}=met_trange_oi;
     load('../../rea_corrmerge/prcp_evaluation.mat','met_merge')
+    met_merge(:,2)=met_merge(:,2)./mean_stn(:,1);
     metall{1,2}=met_merge; 
     load('../../rea_corrmerge/tmean_evaluation.mat','met_merge')
     metall{2,2}=met_merge; 
     load('../../rea_corrmerge/trange_evaluation.mat','met_merge')
+    met_merge(:,2)=met_merge(:,2)./mean_stn(:,3);
     metall{3,2}=met_merge; 
     for v=1:3
-        diff=metall{v,1}-metall{v,2};
+        metv=[metall{v,1},metall{v,2}];
         for i=1:16
-            data=[diff(:,i),dist{v}(:,3)];
-            data(isnan(data(:,1))|isnan(data(:,2)),:)=[];
+            data=[metv(:,[i,i+16]),dist{v}(:,3)];
+            data(isnan(data(:,1))|isnan(data(:,2))|isnan(data(:,3)),:)=[];
             for j=1:numbin
-                indj=data(:,2)>=distbin(j)&data(:,2)<distbin(j+1);
-                metbin{v}(j,i)=nanmedian(data(indj,1));
+                indj=data(:,3)>=distbin(j)&data(:,3)<distbin(j+1);
+                metbin{v}(j,i)=nanmedian(data(indj,1)-data(indj,2));
+                metbin_oi{v}(j,i)=nanmedian(data(indj,1));
+                metbin_rea{v}(j,i)=nanmedian(data(indj,2));
                 metnum{v}(j,i)=sum(indj);
                 metdist(j)=(distbin(j)+distbin(j+1))/2;
             end
         end
         
     end
-    save(datafile,'gridnum','distbin','metnum','metbin','metdist');
+    save(datafile,'gridnum','distbin','metnum','metbin','metbin_oi','metbin_rea','metdist');
 end
 
 
 % basic settings
 % titles={'(a) Precipitation','(b) Mean temperature','(c) Temperature range'};
-titles={'(a) Precipitation','(b) Mean temperature','(c) Temperature range'};
-ylabels={'mm/day', '\circC', '\circC'};
-ylims=[0, 4; 0, 10; 0, 10];
-fsize=6;
-color1=[0.41961	0.55686	0.13725];
-color2=[0.80392	0.71765	0.61961];
+% titles={'(a) Precipitation','(b) Mean temperature','(c) Temperature range'};
+% ylabels={'mm/day', '\circC', '\circC'};
+% ylims=[0, 4; 0, 10; 0, 10];
+% fsize=6;
+% color1=[0.41961	0.55686	0.13725];
+% color2=[0.80392	0.71765	0.61961];
+% 
+% color3=[0.47843	0.40392	0.93333];
+% color4=[0.11765	0.56471	1];
+% 
+% 
+% figure('color','w','unit','centimeters','position',[15,20,18,18]);
+% haa=tight_subplot(3,1, [.12 .05],[.11 .02],[.06 .06]);
+% 
+% for i=1:3
+%     axes(haa(i))
+%     % plot main figure
+%     yyaxis left
+%     plot(metdist,metbin{i}(:,1),'*-','Color',color1,'LineWidth',2);
+%     ylabel('CC difference')
+%     
+%     yyaxis right
+%     plot(metdist,metbin{i}(:,2),'*-','Color',color2,'LineWidth',2);
+%     ylabel('RMSE difference')
+%     
+%     ax=gca;
+%     ax.YAxis(1).Color = color1;
+%     ax.YAxis(2).Color = color2;
+%     ax.XScale='log';
+%     ax.FontSize=fsize;
+%     
+%     % figure title
+%     th=title(titles{i},'FontWeight','normal','FontSize',fsize+3);
+%     th.Position(2)=th.Position(2)*0.8;
+% %     th.Position(1)=th.Position(1)*0.15;
+%     
+%     %  nest grid number bar
+%     po=get(haa(i),'Position');
+%     po(1)=po(1);
+%     po(2)=po(2)-0.065;
+%     po(3)=po(3);
+%     po(4)=0.065;
+%     hn = axes('position',po);
+%     
+%     hold on
+%     yyaxis right
+%     dij=squeeze(gridnum(3,i,:));
+%     x=[metdist;flipud(metdist)];
+%     y=[dij;dij*0];
+%     fill(x,y,color3,'FaceAlpha',0.5);
+%     set(hn,'YLim',[0,60000],'YTick',[0,20000,40000],'YTickLabel',[0,20000,40000]);
+%     ylabel('Number');
+%     
+%     yyaxis left
+%     dij=metnum{i}(:,1);
+%     y=[dij;dij*0];
+%     fill(x,y,color4,'FaceAlpha',0.5);
+%     set(hn,'YLim',[0,6000],'YTick',[0,2000,4000],'YTickLabel',[0,2000,4000]);
+%     ylabel('Number');
+%     hold off
+%     box on
+%     hn.XScale='log';
+% %     set(hn,'xColor',[0.4,0.4,0.4],'yColor',[0.32549	0.52549	0.5451]);
+%     hn.YAxis(1).Color = color4;
+%     hn.YAxis(2).Color = color3;
+% 
+%     xlabel('Distance (km)')
+%     set(hn,'fontsize',fsize)
+% end
 
-color3=[0.47843	0.40392	0.93333];
-color4=[0.11765	0.56471	1];
-
-
-figure('color','w','unit','centimeters','position',[15,20,18,18]);
-haa=tight_subplot(3,1, [.12 .05],[.11 .02],[.06 .06]);
-
-for i=1:3
-    axes(haa(i))
-    % plot main figure
-    yyaxis left
-    plot(metdist,metbin{i}(:,1),'*-','Color',color1,'LineWidth',2);
-    ylabel('CC difference')
-    
-    yyaxis right
-    plot(metdist,metbin{i}(:,2),'*-','Color',color2,'LineWidth',2);
-    ylabel('RMSE difference')
-    
-    ax=gca;
-    ax.YAxis(1).Color = color1;
-    ax.YAxis(2).Color = color2;
-    ax.XScale='log';
-    ax.FontSize=fsize;
-    
-    % figure title
-    th=title(titles{i},'FontWeight','normal','FontSize',fsize+3);
-    th.Position(2)=th.Position(2)*0.8;
-%     th.Position(1)=th.Position(1)*0.15;
-    
-    %  nest grid number bar
-    po=get(haa(i),'Position');
-    po(1)=po(1);
-    po(2)=po(2)-0.065;
-    po(3)=po(3);
-    po(4)=0.065;
-    hn = axes('position',po);
-    
-    hold on
-    yyaxis right
-    dij=squeeze(gridnum(3,i,:));
-    x=[metdist;flipud(metdist)];
-    y=[dij;dij*0];
-    fill(x,y,color3,'FaceAlpha',0.5);
-    set(hn,'YLim',[0,60000],'YTick',[0,20000,40000],'YTickLabel',[0,20000,40000]);
-    ylabel('Number');
-    
-    yyaxis left
-    dij=metnum{i}(:,1);
-    y=[dij;dij*0];
-    fill(x,y,color4,'FaceAlpha',0.5);
-    set(hn,'YLim',[0,6000],'YTick',[0,2000,4000],'YTickLabel',[0,2000,4000]);
-    ylabel('Number');
-    hold off
-    box on
-    hn.XScale='log';
-%     set(hn,'xColor',[0.4,0.4,0.4],'yColor',[0.32549	0.52549	0.5451]);
-    hn.YAxis(1).Color = color4;
-    hn.YAxis(2).Color = color3;
-
-    xlabel('Distance (km)')
-    set(hn,'fontsize',fsize)
-end
-
-fig = gcf;
-fig.PaperPositionMode='auto';
-fig_pos = fig.PaperPosition;
-fig.PaperSize = [fig_pos(3) fig_pos(4)];
-print(gcf,'-dpng',[Outfigure,'.png'],'-r600');
+% fig = gcf;
+% fig.PaperPositionMode='auto';
+% fig_pos = fig.PaperPosition;
+% fig.PaperSize = [fig_pos(3) fig_pos(4)];
+% print(gcf,'-dpng',[Outfigure,'.png'],'-r600');

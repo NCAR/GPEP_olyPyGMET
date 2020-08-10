@@ -1,7 +1,9 @@
+% rmse is normalized using mean value for prcp and trange
 clc;clear;close all
-mode='reg'; % reg/rea
+addpath('~/m_map');
+mode='rea'; % reg/rea
 
-if strcmp(mode,'reg')
+if strcmp(mode,'rea')
     Outfigure='oi_vs_rea';
 elseif strcmp(mode,'reg')
     Outfigure='oi_vs_reg';
@@ -16,8 +18,16 @@ datafile='oi_vsreg_rea.mat';
 if exist(datafile,'file')
     load(datafile);
 else
+    load('mean_value.mat','mean_stn');
+    % calculate mean precipitation and temperature range
     load('oi_evaluation.mat')
+    met_prcp_oi(:,2)=met_prcp_oi(:,2)./mean_stn(:,1);
+    met_trange_oi(:,2)=met_trange_oi(:,2)./mean_stn(:,3);
+    
     load('reg_evaluation.mat')
+    met_prcp_reg(:,2)=met_prcp_reg(:,2)./mean_stn(:,1);
+    met_trange_reg(:,2)=met_trange_reg(:,2)./mean_stn(:,3);
+   
     oi_vs_reg=cell(3,1);
     oi_vs_reg{1}=met_prcp_oi-met_prcp_reg;
     oi_vs_reg{2}=met_tmean_oi-met_tmean_reg;
@@ -46,9 +56,10 @@ else
     end
     
     
-    file={'../rea_corrmerge/prcp_evaluation.mat',...
-        '../rea_corrmerge/tmean_evaluation.mat',...
-        '../rea_corrmerge/trange_evaluation.mat'};
+    file={'../../rea_corrmerge/prcp_evaluation.mat',...
+        '../../rea_corrmerge/tmean_evaluation.mat',...
+        '../../rea_corrmerge/trange_evaluation.mat'};
+    
     oi_vs_rea_grid=nan*zeros(3,nrows,ncols,15); % 3 variables
     oimet=cell(3,1);
     oimet{1}=met_prcp_oi;
@@ -56,6 +67,9 @@ else
     oimet{3}=met_trange_oi;
     for i=1:3
         load(file{i},'met_merge');
+        if i~=2
+            met_merge(:,2)=met_merge(:,2)./mean_stn(:,i);
+        end
         latdiff=oimet{i}-met_merge;
         for j=1:15
             m1=nan*zeros(nrows,ncols);
@@ -100,7 +114,7 @@ if strcmp(mode,'rea')
     clims(2,1)={[-0.1,0.1]};
     clims(2,2)={[-1,1]};
     clims(3,1)={[-0.3,0.3]};
-    clims(3,2)={[-2,2]};
+    clims(3,2)={[-0.2,0.2]};
     cbins=[5,5,5,5];
 elseif strcmp(mode,'reg')
     clims=cell(4,3);
@@ -109,7 +123,7 @@ elseif strcmp(mode,'reg')
     clims(2,1)={[-0.1,0.1]};
     clims(2,2)={[-1,1]};
     clims(3,1)={[-0.2,0.2]};
-    clims(3,2)={[-1,1]};
+    clims(3,2)={[-0.2,0.2]};
     cbins=[5,5,5,5];
 end
 
@@ -153,12 +167,8 @@ for i=1:3
         set(h,'Ticks',linspace(clims{i,j}(1),clims{i,j}(2),cbins(i)),'TickLabels',linspace(clims{i,j}(1),clims{i,j}(2),cbins(i)),'fontsize',fsize);
         cbarrow
         
-        if j==2
-            if i==1
-                th=title(h,'mm/d');
-            else
-                th=title(h,'\circC');
-            end
+        if j==2 && i==2
+            th=title(h,'\circC');
             th.Position(2)=th.Position(2)*1.07;
         end
         
@@ -185,7 +195,7 @@ for i=1:3
         po(3)=po(3)*0.2;
         po(4)=po(4)*1;
         hn = axes('position',po);
-        dij=(squeeze(latdiff(i,j,:)));
+        dij=flipud(squeeze(latdiff(i,j,:)));
         temp=plot(dij,1:160,'k');
         set(hn,'fontsize',fsize+1)
         ylabel('Latitude');
@@ -200,7 +210,5 @@ fig.PaperPositionMode='auto';
 fig_pos = fig.PaperPosition;
 fig.PaperSize = [fig_pos(3) fig_pos(4)];
 print(gcf,'-dpng',[Outfigure,'.png'],'-r600');
-
-
 
 

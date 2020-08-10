@@ -88,21 +88,26 @@ for i=1:3
     plot(metdist,metbin2{i}(:,1),'^--','Color',color1,'LineWidth',1.5);
     hold off
     ylabel('CC difference')
-    set(gca,'ytick',linspace(ylims(i,1),ylims(i,2),6),'yticklabel',linspace(ylims(i,1),ylims(i,2),6))
+    set(gca,'ylim',ylims(i,:),'ytick',linspace(ylims(i,1),ylims(i,2),6),'yticklabel',linspace(ylims(i,1),ylims(i,2),6))
     
     yyaxis right
     hold on
     plot(metdist,metbin1{i}(:,2),'*-','Color',color2,'LineWidth',1.5);
     plot(metdist,metbin2{i}(:,2),'^--','Color',color2,'LineWidth',1.5);
     hold off
-    ylabel('RMSE difference')
-    
+    if i==2
+        ylabel('RMSE difference')
+    else
+        ylabel('NRMSE difference')
+    end
+        
     ax=gca;
     ax.YAxis(1).Color = color1;
     ax.YAxis(2).Color = color2;
     ax.XScale='log';
     ax.FontSize=fsize;
     
+    xlim([0,1000]);
     % figure title
     th=title(titles{i},'FontWeight','normal','FontSize',fsize+3);
     th.Position(2)=th.Position(2)*0.9;
@@ -137,7 +142,8 @@ for i=1:3
 %     set(hn,'xColor',[0.4,0.4,0.4],'yColor',[0.32549	0.52549	0.5451]);
     hn.YAxis(1).Color = color4;
     hn.YAxis(2).Color = color3;
-
+    
+    xlim([0,1000]);
     xlabel('Distance (km)')
     set(hn,'fontsize',fsize)
 end
@@ -150,8 +156,8 @@ lh2=legend(ax,{'CC: OI - REG','CC: OI - BMA','RMSE: OI - REG','RMSE: OI - BMA'},
 lh2.Position(1)=lh1.Position(1)-lh2.Position(3);
 lh2.Position(2)=lh1.Position(2);
 
-fig = gcf;
-fig.PaperPositionMode='auto';
-fig_pos = fig.PaperPosition;
-fig.PaperSize = [fig_pos(3) fig_pos(4)];
-print(gcf,'-dpng',[Outfigure,'.png'],'-r600');
+% fig = gcf;
+% fig.PaperPositionMode='auto';
+% fig_pos = fig.PaperPosition;
+% fig.PaperSize = [fig_pos(3) fig_pos(4)];
+% print(gcf,'-dpng',[Outfigure,'.png'],'-r600');
