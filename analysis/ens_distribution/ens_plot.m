@@ -45,8 +45,8 @@ clims(1:3,1)={[0, 8]};
 clims(1:3,2)={[0, 30]};
 clims(1:3,3)={[0, 30]};
 clims(4,1)={[0, 2]};
-clims(4,2)={[0, 0.6]};
-clims(4,3)={[0, 0.6]};
+clims(4,2)={[0, 0.8]};
+clims(4,3)={[0, 0.8]};
 
 fsize=5;
 figure('color','w','unit','centimeters','position',[15,20,14.5,18]);

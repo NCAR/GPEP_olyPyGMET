@@ -1,5 +1,6 @@
 % distribution of negative bss, rpss
 clc;clear;close all
+addpath('~/m_map/');
 Outfigure='negative_latlon';
 shapefile='/Users/localuser/Google Drive/Datasets/Shapefiles/North America/From MERIT DEM/North_America.shp';
 shp=shaperead(shapefile);
@@ -74,8 +75,8 @@ for i=1:4
 end
 
 
-% fig = gcf;
-% fig.PaperPositionMode='auto';
-% fig_pos = fig.PaperPosition;
-% fig.PaperSize = [fig_pos(3) fig_pos(4)];
-% print(gcf,'-dpng',[Outfigure,'.png'],'-r600');
+fig = gcf;
+fig.PaperPositionMode='auto';
+fig_pos = fig.PaperPosition;
+fig.PaperSize = [fig_pos(3) fig_pos(4)];
+print(gcf,'-dpng',[Outfigure,'.png'],'-r600');

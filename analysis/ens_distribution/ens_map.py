@@ -3,13 +3,13 @@ import numpy as np
 import netCDF4 as nc
 from scipy import io
 
-for year in range(2016, 2017):
+for year in range(1979, 1980):
     for month in range(1,13):
         ens_num = [1, 25, 50, 75, 100]
         outfile = 'oi_ens_mean_{}.mat'.format(year*100+month)
 
         oi_path = '/home/gut428/scratch/GMET/GMET_OIinput'
-        ens_path = '/home/gut428/scratch/GMET/EMDNA_out'
+        ens_path = '/home/gut428/scratch/GMET/EMDNA_out/Estimate_spearman'
 
         # load oi data
         vars = ['pcp','tmean','trange']
@@ -28,7 +28,7 @@ for year in range(2016, 2017):
         en = len(ens_num)
         ens_data = np.zeros([800, 1300, 3, en], dtype=np.float32)
         for e in range(en):
-            ens_file = '{}/ens_{}.{:03d}.nc'.format(ens_path, year*100+month,ens_num[e])
+            ens_file = '{}/EMDNA_{}.{:03d}.nc4'.format(ens_path, year*100+month,ens_num[e])
             d = nc.Dataset(ens_file)
             for i in range(3):
                 di = d[vars[i]][:].data
@@ -38,7 +38,7 @@ for year in range(2016, 2017):
         for i in range(3):
             datai = np.zeros([800, 1300, 100], dtype=np.float32)
             for e in range(1,101):
-                ens_file = '{}/ens_{}.{:03d}.nc'.format(ens_path, year * 100 + month, e)
+                ens_file = '{}/EMDNA_{}.{:03d}.nc4'.format(ens_path, year * 100 + month, e)
                 d = nc.Dataset(ens_file)
                 di = d[vars[i]][:].data
                 datai[:, :, e-1] = np.nanmean(di, axis=0)

@@ -104,8 +104,8 @@ for suffix in suffixall:
             d1 = io.loadmat(file1)
             data_stn = d1['data_stn']
             LLE = d1['LLE']
-            num = np.sum(data_stn > -100, axis=1)
-            data_stn[num<leastnum[v],:] = np.nan
+            num = np.sum(data_stn > -100, axis=0)
+            data_stn[:, num<leastnum[v]] = np.nan
 
 
             d2 = io.loadmat(file2)

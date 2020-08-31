@@ -92,7 +92,7 @@ for i=1:6
 end
 hold off
 set(gca,'xlim',[1979,2018],'xtick',1980:5:2018,'xticklabel',1980:5:2018);
-set(gca,'ylim',[0.2,0.6],'ytick',0:0.1:1,'yticklabel',0:0.1:1);
+set(gca,'ylim',[0.2,0.7],'ytick',0:0.1:1,'yticklabel',0:0.1:1);
 xlabel('Year','fontsize',fsize+1);
 ylabel('BSS','fontsize',fsize+1);
 set(gca,'fontsize',fsize,'Box','on');
