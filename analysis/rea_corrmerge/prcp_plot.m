@@ -72,7 +72,7 @@ cbins=[6,7,7,7];
 
 fsize=4;
 xtitles={'ERA5','MERRA-2','JRA-55'};
-ytitles={'CC','RMSE','CC','RMSE'};
+ytitles={'CC','RMSE','CC difference','RMSE difference'};
 
 figure('color','w','unit','centimeters','position',[15,20,14.2,15]);
 haa=tight_subplot(4,3, [0.015 0.015],[.02 .03],[.08 .06]);
@@ -140,11 +140,13 @@ for i=1:4
         hn = axes('position',po);
         hold on
         temp=histogram(dataplot{i,j}(:),linspace(clims{i,j}(1),clims{i,j}(2),10),...
-            'facecolor',[0.8,0.8,0.8],'edgecolor',[0.8,0.8,0.8]);
+            'facecolor',[0.5,0.5,0.5],'edgecolor',[0.8,0.8,0.8]);
 %         plot([clims{i,j}(1),clims{i,j}(1)],[0,max(temp.Values)],'-k');
         set(hn,'ylim',[0,max(temp.Values)],'yticklabel','','ycolor',[1,1,1]);
-        set(hn,'xtick',linspace(clims{i,j}(1),clims{i,j}(2),3),'xticklabel',linspace(clims{i,j}(1),clims{i,j}(2),3),'fontsize',fsize+1)
-  
+        set(hn,'xlim',clims{i,j}(1:2),'xtick',linspace(clims{i,j}(1),clims{i,j}(2),3),'xticklabel',linspace(clims{i,j}(1),clims{i,j}(2),3),'fontsize',fsize+1)
+        plot([clims{i,j}(1)-0.2,clims{i,j}(2)+0.2],[0,0],'k');
+        hold off
+        
         flag=flag+1;
     end
 end

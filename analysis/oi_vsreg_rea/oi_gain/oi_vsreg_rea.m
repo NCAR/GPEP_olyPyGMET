@@ -131,7 +131,9 @@ end
 fsize=4;
 xtitles={'CC','RMSE'};
 ytitles={'Precipitation','Mean temperature','Temperature range'};
-titles={'(a)','(b)','(c)','(d)','(e)','(f)'};
+titles={'(a) Precipitation: CC','(b)Precipitation: NRMSE', ...
+    '(c) Tmean: CC','(d) Tmean: RMSE',...
+    '(e) Trange: CC','(f) Trange: NRMSE'};
 
 figure('color','w','unit','centimeters','position',[15,20,15,15]);
 haa=tight_subplot(3,2, [0.05 0.17],[.02 .01],[.1 .06]);
@@ -182,11 +184,13 @@ for i=1:3
         hn = axes('position',po);
         hold on
         temp=histogram(dij(:),linspace(clims{i,j}(1),clims{i,j}(2),20),...
-            'facecolor',[0.8,0.8,0.8],'edgecolor',[0.8,0.8,0.8]);
+            'facecolor',[0.5,0.5,0.5],'edgecolor',[0.8,0.8,0.8]);
         %         plot([clims{i,j}(1),clims{i,j}(1)],[0,max(temp.Values)],'-k');
+        plot([clims{i,j}(1)-0.2,clims{i,j}(2)+0.2],[0,0],'k');
         hold off
         set(hn,'ylim',[0,max(temp.Values)],'yticklabel','','ycolor',[1,1,1]);
-        set(hn,'xtick',linspace(clims{i,j}(1),clims{i,j}(2),3),'xticklabel',linspace(clims{i,j}(1),clims{i,j}(2),3),'fontsize',fsize+1)
+        set(hn,'xlim',clims{i,j}(1:2),'xtick',linspace(clims{i,j}(1),clims{i,j}(2),3),'xticklabel',linspace(clims{i,j}(1),clims{i,j}(2),3),'fontsize',fsize+1)
+        
         
         % nest a latitude curve plot
         po=get(haa(flag),'Position');
@@ -200,7 +204,7 @@ for i=1:3
         set(hn,'fontsize',fsize+1)
         ylabel('Latitude');
         
-        set(hn,'xColor',[0.6,0.6,0.6],'yColor',[0.6,0.6,0.6]);
+        set(hn,'xColor',[0.3,0.3,0.3],'yColor',[0.3,0.3,0.3]);
         set(hn,'ylim',[0,160],'ytick',0:20:160,'yticklabel',5:10:85);
         flag=flag+1;
     end

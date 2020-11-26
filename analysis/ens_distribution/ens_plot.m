@@ -42,15 +42,15 @@ unit={'mm/d','\circC','\circC'};
 
 clims=cell(4,3);
 clims(1:3,1)={[0, 8]};
-clims(1:3,2)={[0, 30]};
-clims(1:3,3)={[0, 30]};
+clims(1:3,2)={[0, 32]};
+clims(1:3,3)={[0, 20]};
 clims(4,1)={[0, 2]};
 clims(4,2)={[0, 0.8]};
 clims(4,3)={[0, 0.8]};
 
 fsize=5;
-figure('color','w','unit','centimeters','position',[15,20,14.5,18]);
-haa=tight_subplot(4,3, [.02 .02],[.01 .03],[.04 .02]);
+figure('color','w','unit','centimeters','position',[15,20,15,18]);
+haa=tight_subplot(4,3, [.0 .02],[.1 .03],[.04 .02]);
 flag=1;
 for i=1:4
     for v=1:3
@@ -68,7 +68,7 @@ for i=1:4
         hold off
         shading flat
         
-        m_grid('linewi',1,'tickdir','in','fontsize',fsize,'xticklabel','','yticklabel','','color','w');
+        m_grid('linewi',1,'tickdir','in','fontsize',fsize,'xticklabel','','yticklabel','','color','w','linestyle','none');
         if i==1
             title(title1{v},'fontsize',fsize+2);
         end
@@ -77,19 +77,28 @@ for i=1:4
         end
         
         if i<=3
-            colormap(gca,(m_colmap('jet',60)));
-%             colormap(gca,'hsv');
+%             colormap(gca,(m_colmap('blue',60)));
+            colormap(gca,'winter');
         else
             colormap(gca,flipud(m_colmap('blue',60)));
         end
-        %         colormap(gca,(m_colmap('jet',60)));
+  
         caxis(clims{i,v});
-        h=colorbar('west','fontsize',fsize);
-        set(get(h,'title'),'String',unit{v},'fontsize',fsize);
-        h.Position=h.Position+[0.05 0.01 -0.015 -0.14];
-        h.AxisLocation='out';
-        set(h,'ticks',linspace(clims{i,v}(1),clims{i,v}(2),3));
-%         cbarrow
+        
+        if i==4
+            po=get(haa(flag),'Position');
+            po(2)=po(2)-0.05;
+            set(haa(flag),'Position',po);
+        end
+        if i>=3
+            h=colorbar('south','fontsize',fsize);
+            set(get(h,'title'),'String',unit{v},'fontsize',fsize);
+            h.Position=h.Position+[0. -0.04 0. -0.007];
+            h.AxisLocation='out';
+            set(h,'ticks',linspace(clims{i,v}(1),clims{i,v}(2),5));
+        end
+        
+        
         flag=flag+1;
     end
 end

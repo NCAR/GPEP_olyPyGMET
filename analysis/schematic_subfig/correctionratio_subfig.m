@@ -1,11 +1,13 @@
 clc;clear;close all
+addpath('/Users/localuser/Github/tools/export_fig');
+
 file='CHELSA_V12_NA_corratio.mat';
 load(file,'corr_ratio');
 
 % distribution map
 fsize=8;
 figure('color','w','unit','centimeters','position',[15,20,10,4]);
-haa=tight_subplot(1,3, [0.0 0.02],[.04 .12],[.02 .02]);
+haa=tight_subplot(1,3, [0.0 0.02],[.15 .12],[.02 .02]);
 
 axes(haa(1));
 d=corr_ratio(:,:,4);
@@ -14,18 +16,18 @@ colormap(winter)
 caxis([0,3]);
 axis off
 title('April','fontweight','normal','fontsize',fsize)
-lh=colorbar('location','west','fontsize',fsize-3);
-lh.Position=lh.Position+[0.03 0.05 -0.02 -0.5];
+% lh=colorbar('location','west','fontsize',fsize-3);
+% lh.Position=lh.Position+[0.03 0.05 -0.02 -0.5];
 
 axes(haa(2));
 d=corr_ratio(:,:,8);
 imagesc(d,'alphadata',~isnan(d));
-colormap(winter)
+% colormap(winter)
 caxis([0,3]);
 axis off
 title('August','fontweight','normal','fontsize',fsize)
-lh=colorbar('location','west','fontsize',fsize-3);
-lh.Position=lh.Position+[0.03 0.05 -0.02 -0.5];
+% lh=colorbar('location','west','fontsize',fsize-3);
+% lh.Position=lh.Position+[0.03 0.05 -0.02 -0.5];
 
 axes(haa(3));
 d=corr_ratio(:,:,12);
@@ -35,8 +37,13 @@ caxis([0,3]);
 axis off
 
 title('December','fontweight','normal','fontsize',fsize)
-lh=colorbar('location','west','fontsize',fsize-3);
-lh.Position=lh.Position+[0.03 0.05 -0.02 -0.5];
+% lh=colorbar('location','west','fontsize',fsize-3);
+% lh.Position=lh.Position+[0.03 0.05 -0.02 -0.5];
+
+
+lh=colorbar('location','south','fontsize',fsize-3);
+lh.Position=lh.Position+[-0.4 -0.15 0.2 -0.03];
+
 
 export_fig corr_ratio.png -transparent -m10
 
