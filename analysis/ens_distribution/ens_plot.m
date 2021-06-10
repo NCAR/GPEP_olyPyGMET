@@ -79,6 +79,7 @@ for i=1:4
         if i<=3
 %             colormap(gca,(m_colmap('blue',60)));
             colormap(gca,'winter');
+%             colormap(gca,m_colmap('jet',60));
         else
             colormap(gca,flipud(m_colmap('blue',60)));
         end

@@ -13,8 +13,8 @@ lon=-180+0.05:0.1:-50-0.05;
 fsize=12;
 h = figure('color','w');
 % axis tight manual % this ensures that getframe() returns a consistent size
-filename = 'prcp_201606.gif';
-for n = 1:100
+filename = 'prcp_201606_10member.gif';
+for n = 1:10
     m_proj('Miller','lon',[-180 -50],'lat',[5 85]);
     m_pcolor(lon,lat,prcp(:,:,n));
 %     imagesc(prcp(:,:,n),'alphadata',prcp(:,:,n)>=0);
